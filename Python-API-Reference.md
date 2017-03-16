@@ -1,43 +1,32 @@
-**Gateway Python3.5 Module API**
-
+# Gateway Python3.5 Module API
 **( Version 1.0, 2017.01.23 )**
 
-
-
-[[TOC]]
-
-1. 개요
-
-PallyCon 서비스 사용 시 pack rule 발급, license rule 발급, application 연동에 필요한 Gateway 페이지를 구성는데 사용 가능한 module 이다.
+## 1. 개요
+PallyCon 서비스 사용 시 pack rule 발급, 라이선스 발급, 어플리케이션 연동에 필요한 Gateway 페이지를 구성하기 위해 사용할 수 있는 모듈입니다.
 
 ![image alt text](image_0.png)
 
-1. licenseGateway :  Application 에서 컨텐츠 재생 요청 시 라이센스 룰 발급을 위해 PallyCon license server에서는 licenseGateway 페이지로 license Rule 정보를 요청하게 된다.
+1. licenseGateway :  어플리케이션에서 콘텐츠 재생 요청 시 라이센스 룰 발급을 위해 PallyCon 라이선스 서버에서는 licenseGateway 페이지로 라이선스 룰 정보를 요청합니다.
+2. packageGateway : 패키져에서 콘텐츠의 DRM 패키징 시 사용될 키 정보를 PallyCon 라이선스 서버에서는 packageGateway 페이지로 요청합니다.
 
-2. packageGateway : 패키져에서 컨텐츠 DRM 패키징 시 사용될 key 정보를 PallyCon license server에서는 packageGateway 페이지로 키 정보를 요청하게 된다.
-
-2. API 
+## 2. API 
 
 ## Class RIRequest
+gateway로 요청된 데이터의 파싱과 응답 데이터 생성에 사용할 수 있습니다.
 
-	gateway 에 넘어온 data parsing 과 response data를 생성하는데 사용할 수 있다.
-
-1. file path 
-
+### 1. file path 
 : lib/Gateway.py
 
-2. Method 
+### 2. Method 
 
-#### *def *__init__(self, key, iv)
-
+#### *def* __init__(self, key, iv)
 생성자, 전달받은 key와 iv를  이용해 aes 암복호화 객체를 생성.
 
 #### *def* parser_decode ( self, params)
-
- 	AES256(CBC) 암호화 된 데이터를 받아 복호화 한다.
+AES256(CBC) 암호화 된 데이터를 받아 복호화 한다.
 
 **Parameter**
-
+```
 <table>
   <tr>
     <td>type</td>
@@ -50,12 +39,12 @@ PallyCon 서비스 사용 시 pack rule 발급, license rule 발급, application
     <td>AES256 암호화 된 값.</td>
   </tr>
 </table>
+```
 
+**Return** *json*
 
-**Return ***json*
-
-*Example.*
-
+*Example*
+```
 <table>
   <tr>
     <td>@app.route('/CIDIssue', methods=['POST', 'GET'])
@@ -75,14 +64,13 @@ def _CIDIssue():
    return response_str</td>
   </tr>
 </table>
-
+```
 
 #### *def* parser_encode(self, params)
-
- 	암호화할 str 데이터를 받아 AES256(CBC) 로 암호화 한다.
+암호화할 str 데이터를 받아 AES256(CBC)로 암호화 한다.
 
 **Parameter**
-
+```
 <table>
   <tr>
     <td>type</td>
@@ -95,12 +83,12 @@ def _CIDIssue():
     <td>AES256 암호화 할 값.</td>
   </tr>
 </table>
+```
 
+**Return** *str*
 
-**Return ***str*
-
-*Example.*
-
+*Example*
+```
 <table>
   <tr>
     <td>@app.route('/CIDIssue', methods=['POST', 'GET'])
@@ -120,14 +108,13 @@ def _CIDIssue():
    return response_str</td>
   </tr>
 </table>
-
+```
 
 #### *def* creat_package_info(self, object = gatewayDTO)
-
- 	package rule 연동 response 규격에 맞춰 값을 생성한다.
+package rule 연동 response 규격에 맞춰 값을 생성한다.
 
 **Parameter**
-
+```
 <table>
   <tr>
     <td>type</td>
@@ -140,12 +127,12 @@ def _CIDIssue():
     <td>package rule 발급을 위해 setting 가능한 DTO 객체</td>
   </tr>
 </table>
+```
 
+**Return** *str*
 
-**Return ***str*
-
-*Example.*
-
+*Example*
+```
 <table>
   <tr>
     <td>@app.route('/CIDIssue', methods=['POST', 'GET'])
@@ -170,20 +157,19 @@ before encrypt value : {"error_code":"0000","error_message":"success","cid":"tes
 ‘’’</td>
   </tr>
 </table>
+```
 
-
-#### *def *get_license_info(self)
-
+#### *def* get_license_info(self)
 만들어진 package rule 을 반환한다.
 
-**Return ***json*
+**Return** *json*
 
-#### *def *create_license_rule(self, object = gatewayDTO)
+#### *def* create_license_rule(self, object = gatewayDTO)
 
 License 발급에 필요한 값을 set 한 gatewayDTO 를 받아 JSON 규격에 맞게 파싱한후 AES256 암호화 한 값을 반환한다.
 
 **Parameter**
-
+```
 <table>
   <tr>
     <td>type</td>
@@ -196,12 +182,12 @@ License 발급에 필요한 값을 set 한 gatewayDTO 를 받아 JSON 규격에 
     <td>암호화할 값</td>
   </tr>
 </table>
+```
 
+**Return** *str*
 
-**Return ***str*
-
-*Example.*
-
+*Example*
+```
 <table>
   <tr>
     <td>@app.route('/ContentUsageRightsInfo', methods=['POST', 'GET'])
@@ -225,38 +211,32 @@ before encrypt value : {"error_code":"0000","error_message":"success","playback_
 ‘’’</td>
   </tr>
 </table>
+```
 
-
-#### *def** *get_license_rule (self)
-
+#### *def* get_license_rule (self)
 만들어진 license rule 을 반환한다.
 
-**Return ***String*
+**Return** *String*
 
 ## Class gatewayDTO
+gateway 와의 통신에 필요한 data 객체. getter와 setter로 구성되어 있다.
 
-	gateway 와의 통신에 필요한 data 객체. getter와 setter로 구성되어 있다.
-
-1. file path 
-
+### 1. file path 
 : lib/gatewayDTO.py
 
 ## Class AESCipher
-
 aes256(CBC) 암호화 모듈.
 
-1. file path
-
+### 1. file path
 : libs/AESCrypto256.py
 
-2. method
+### 2. method
 
-#### 	*def *__init__(self, key, iv, sagment_size=128)
-
-	생성자, 공용으로 사용될 key 와 iv 값, sagment size를(을) 셋팅한다. 
+#### *def* __init__(self, key, iv, sagment_size=128)
+생성자, 공용으로 사용될 key 와 iv 값, sagment size를(을) 셋팅한다. 
 
 **Parameter**
-
+```
 <table>
   <tr>
     <td>type</td>
@@ -279,14 +259,13 @@ aes256(CBC) 암호화 모듈.
     <td>암호화 비트값</td>
   </tr>
 </table>
+```
 
-
-#### *def *encrypt(self, enc )
-
-	aes256 (CBC) encrypt -> base64 encode 된 값을  리턴한다.
+#### *def* encrypt(self, enc )
+aes256 (CBC) encrypt -> base64 encode 된 값을 리턴한다.
 
 **Parameter**
-
+```
 <table>
   <tr>
     <td>type</td>
@@ -299,16 +278,15 @@ aes256(CBC) 암호화 모듈.
     <td>암호화할 값</td>
   </tr>
 </table>
+```
 
+**Return** *str*
 
-**Return ***str*
-
-#### *def *decrypt(self, enc_data )
-
-	base64 decode -> aes256 (CBC) decrypt -> 된 값을  리턴한다.
+#### *def* decrypt(self, enc_data )
+base64 decode -> aes256 (CBC) decrypt -> 된 값을 리턴한다.
 
 **Parameter**
-
+```
 <table>
   <tr>
     <td>type</td>
@@ -321,7 +299,7 @@ aes256(CBC) 암호화 모듈.
     <td>암호화를 풀기 위한 값</td>
   </tr>
 </table>
+```
 
-
-**Return ***str*
+**Return** *str*
 
